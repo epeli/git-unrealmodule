@@ -60,7 +60,7 @@ Available subcommands
 
     clone   - clone new git repositories from .unrealmodules
     commit  - commit changes from sub repositories to the parent repository
-    restore - restore .git files for the .unrealmodules
+    restore - restore .git directories for the sub repositories defined in .unrealmodules
     help    - show this help
 
 Add PATH to execute command to a single sub repository
