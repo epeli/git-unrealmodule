@@ -125,6 +125,16 @@ $commit_message
 "
 }
 
+dispatch_command() {
+    if [ "$command" = "init" ]; then
+        init_module $@
+    elif [ "$command" = "commit" ]; then
+        commit_module $@
+    elif [ "$command" = "restore" ]; then
+        restore_module $@
+    fi
+}
+
 
 echo "$module_config" |
 while read module_line; do
@@ -132,18 +142,9 @@ while read module_line; do
     path="$(echo "$module_line" | cut -d "|" -f 1)"
     src="$(echo "$module_line" | cut -d "|" -f 2)"
     branch="$(echo "$module_line" | cut -d "|" -f 3)"
-
     path="${path%/}" # remove trailing slash
 
-    if [ "$command" = "init" ]; then
-        init_module "$path" "$src" "$branch"
-    elif [ "$command" = "commit" ]; then
-        commit_module "$path" "$src" "$branch"
-    elif [ "$command" = "restore" ]; then
-        restore_module "$path" "$src" "$branch"
-    fi
-
-
+    dispatch_command "$path" "$src" "$branch"
 done
 
 
