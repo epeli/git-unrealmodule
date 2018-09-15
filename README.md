@@ -19,12 +19,14 @@ Unreal Modules can help you in this situation.
 
 ## Usage
 
-Define a list of subrepositories and paths in a `.unrealmodules` file
+Define a list of subrepositories and paths in a `.unrealmodules` file to root of the parent repository.
+
+Example
 
     path/in/the/repo|https://github.com/epeli/git-unrealmodule|master
     something/else|https://github.com/epeli/redux-render-prop
 
-- Commit `.unrealmodules` in to the parent repository.
+- Commit `.unrealmodules` into the parent repository.
 - Clone the subrepositories using `git unrealmodule clone`
 - Work on the parent and/or cloned subrepositories
 - Commit the subrepositories to the parent repository with `git unrealmodule commit`
