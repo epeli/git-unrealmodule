@@ -34,6 +34,11 @@ init_module() {
     src="$2"
     branch="${3:-}"
 
+    if [ -d "$path" -a -d "$path/.git" ]; then
+        err "Init already OK: $path"
+        return
+    fi
+
     if [ -e "$path" ]; then
         add_error "Cannot init path $path: already exits"
     fi
@@ -58,6 +63,7 @@ restore_module() {
     fi
 
     if [ -d "$path/.git" ]; then
+        err "Restore already OK: $path"
         return
     fi
 
