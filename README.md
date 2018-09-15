@@ -15,6 +15,7 @@ Start with
 
 1. Define a list of sub repositories and paths in a `.unrealmodules` file
 2. Commit `.unrealmodules` in to the parent repository
+    - The format is documented below
 3. Clone the sub repositories using `git unrealmodule clone`
 4. Work on the parent and/or cloned sub repositories
 5. Commit the sub repositories to the parent repository with `git unrealmodule commit`
