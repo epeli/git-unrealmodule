@@ -40,7 +40,7 @@ The `git-unrealmodule` is just a single POSIX shell script.
 
 Simplest way to install it is just to copy it to `/usr/local/bin` directory.
 
-or you can use the prodived installer
+or you can use the provided installer
 
     git clone https://github.com/epeli/git-unrealmodule
     cd git-unrealmodule
