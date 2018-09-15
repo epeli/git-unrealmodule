@@ -3,12 +3,48 @@
 set -eu
 
 
-command="$1"
-root="$(pwd)"
-
 err() {
     >&2 echo $@
 }
+
+help() {
+    >&2 echo "
+Manage sub git repositories from an .unrealmodules file
+
+    usage: $0 [SUBCOMMAND]
+
+Available subcommands
+
+    init    - init new git repositories from .unrealmodules
+    commit  - commit changes from sub repositories
+    restore - restore .git files for the .unrealmodules
+    help    - show this help
+
+Format of the .unrealmodules
+
+    Each line has following format
+
+        [PATH]|[GIT_SOURCE]|<BRANCH>
+
+    Example
+
+        path/in/the/repo|https://github.com/epeli/git-unrealmodule|master
+        # This line is a comment
+        something/else|https://github.com/epeli/redux-render-prop
+
+    The branch is optional
+
+    "
+}
+
+if [ "${1:-}" = "" ]; then
+    help
+    exit 1
+fi
+
+command="$1"
+root="$(pwd)"
+
 
 if [ "$(git rev-parse --is-inside-work-tree)" != "true" ]; then
     err "Not inside of a git repository"
@@ -132,6 +168,12 @@ dispatch_command() {
         commit_module $@
     elif [ "$command" = "restore" ]; then
         restore_module $@
+    elif [ "$command" = "help" -o  "$command" = "-h" -o  "$command" = "--help" ]; then
+        help
+        exit 1
+    else
+        err "Unknown unrealmodule command: $command"
+        exit 1
     fi
 }
 
