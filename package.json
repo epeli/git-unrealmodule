@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Manage git repositories inside git repositories",
   "main": "index.js",
+  "bin": {
+    "git-unrealmodule": "git-unrealmodule"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
