@@ -31,16 +31,44 @@ init_module() {
     src="$2"
     branch="${3:-}"
 
-    if [ ! -e "$path" ]; then
-        git clone "$src" "$path"
-        if [ "$branch" != "" ]; then
-            cd "$path"
-            git checkout -t "origin/$branch"
-            cd -
-        fi
-    else
+    if [ -e "$path" ]; then
         add_error "Cannot init path $path: already exits"
     fi
+
+    git clone "$src" "$path"
+
+    if [ "$branch" != "" ]; then
+        cd "$path"
+        git checkout -t "origin/$branch"
+        cd -
+    fi
+}
+
+restore_module() {
+    path="$1"
+    src="$2"
+    branch="${3:-}"
+
+    if [ ! -d "$path" ]; then
+        add_error "Cannot restore: $path is not a directory"
+        return
+    fi
+
+    if [ -d "$path/.git" ]; then
+        return
+    fi
+
+    tmp="$(mktemp -d --suffix -unrealmodule)"
+    git clone "$src" "$tmp"
+    if [ "$branch" != "" ]; then
+        cd "$tmp"
+        git checkout -t "origin/$branch"
+        cd -
+    fi
+
+    mv "$tmp/.git" "$path"
+    rm -rf "$tmp"
+
 }
 
 commit_module() {
@@ -101,6 +129,8 @@ while read module_line; do
         init_module "$path" "$src" "$branch"
     elif [ "$command" = "commit" ]; then
         commit_module "$path" "$src" "$branch"
+    elif [ "$command" = "restore" ]; then
+        restore_module "$path" "$src" "$branch"
     fi
 
 
