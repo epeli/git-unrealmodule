@@ -1,0 +1,112 @@
+#!/bin/sh
+
+set -eu
+
+
+command="$1"
+root="$(pwd)"
+
+err() {
+    >&2 echo $@
+}
+
+if [ "$(git rev-parse --is-inside-work-tree)" != "true" ]; then
+    err "Not inside of a git repository"
+    exit 1
+fi
+
+if [ ! -f .unrealmodules ]; then
+    err "Cannot find .unrealmodules from $(pwd)"
+    exit 1
+fi
+
+error_messages=""
+
+add_error() {
+    error_messages="$error_messages\n\n$@"
+}
+
+init_module() {
+    path="$1"
+    src="$2"
+
+    if [ ! -e "$path" ]; then
+        git clone "$src" "$path"
+    else
+        add_error "Cannot init path $path: already exits"
+    fi
+}
+
+commit_module() {
+    path="$1"
+    src="$2"
+
+    if [ "$(git diff --cached)" != "" ]; then
+        err "You have files in staging area. Cannot continue."
+        exit 1
+    fi
+
+
+    if [ ! -d "$path" ]; then
+        add_error "Cannot commit: $path: Not a directory"
+        return
+    fi
+
+    cd "$path"
+
+    if [ ! -d .git ]; then
+        add_error "Cannot commit: $path: Not a sub git repository"
+        return
+    fi
+
+    if [ "$(git status --porcelain)" != "" ]; then
+        add_error "Cannot commit: $path: Is dirty. Commit changes in it first"
+
+    fi
+
+    commit_message="$(git log -1)"
+    commit_rev="$(git rev-parse HEAD | head -c 7)"
+
+    cd "$root"
+
+    git add "$path"
+    git commit -m "Update unrealmodule $path to $commit_rev
+
+Unrealmodule origin: $src
+
+Commit in origin:
+
+$commit_message
+"
+}
+
+
+while read module; do
+    cd "$root"
+    path="$(echo "$module" | cut -d "|" -f 1)"
+    src="$(echo "$module" | cut -d "|" -f 2)"
+    path="${path%/}" # remove trailing slash
+
+    echo "$path"
+    continue
+
+    if [ "$command" = "init" ]; then
+        init_module "$path" "$src"
+    elif [ "$command" = "commit" ]; then
+        commit_module "$path" "$src"
+    fi
+
+
+done < .unrealmodules
+
+
+
+if [ "$error_messages" != "" ]; then
+    err
+    err "Failed with following errors:"
+    err "$error_messages"
+    err
+    exit 1
+fi
+
+
