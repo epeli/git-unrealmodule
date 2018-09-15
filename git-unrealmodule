@@ -61,7 +61,7 @@ commit_module() {
 
     if [ "$(git status --porcelain)" != "" ]; then
         add_error "Cannot commit: $path: Is dirty. Commit changes in it first"
-
+        return
     fi
 
     commit_message="$(git log -1)"
@@ -69,10 +69,10 @@ commit_module() {
 
     cd "$root"
 
-    git add "$path"
-    git commit -m "Update unrealmodule $path to $commit_rev
+    git add "$path/"
+    git commit -m "Commit unrealmodule $path to $commit_rev
 
-Unrealmodule origin: $src
+Origin: $src
 
 Commit in origin:
 
@@ -86,9 +86,6 @@ while read module; do
     path="$(echo "$module" | cut -d "|" -f 1)"
     src="$(echo "$module" | cut -d "|" -f 2)"
     path="${path%/}" # remove trailing slash
-
-    echo "$path"
-    continue
 
     if [ "$command" = "init" ]; then
         init_module "$path" "$src"
