@@ -1,5 +1,5 @@
 {
-  "name": "unrealmodule",
+  "name": "git-unrealmodule",
   "version": "0.1.1",
   "description": "Manage git repositories inside git repositories",
   "main": "index.js",
