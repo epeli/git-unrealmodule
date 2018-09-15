@@ -15,7 +15,7 @@ Manage sub git repositories from an .unrealmodules file
 
 Available subcommands
 
-    init    - init new git repositories from .unrealmodules
+    clone   - clone new git repositories from .unrealmodules
     commit  - commit changes from sub repositories
     restore - restore .git files for the .unrealmodules
     help    - show this help
@@ -79,18 +79,18 @@ add_error() {
     error_messages="$error_messages\n\n$@"
 }
 
-init_module() {
+clone_module() {
     path="$1"
     src="$2"
     branch="${3:-}"
 
     if [ -d "$path" -a -d "$path/.git" ]; then
-        err "Init already OK: $path"
+        err "Clone already OK: $path"
         return
     fi
 
     if [ -e "$path" ]; then
-        add_error "Cannot init path $path: already exits"
+        add_error "Cannot clone repository to path $path: already exits"
     fi
 
     git clone "$src" "$path"
@@ -176,8 +176,8 @@ $commit_message
 }
 
 dispatch_command() {
-    if [ "$command" = "init" ]; then
-        init_module $@
+    if [ "$command" = "clone" ]; then
+        clone_module $@
     elif [ "$command" = "commit" ]; then
         commit_module $@
     elif [ "$command" = "restore" ]; then
