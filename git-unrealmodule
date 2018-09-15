@@ -186,12 +186,17 @@ commit_module() {
     git add "$path/"
     git commit -m "Commit unrealmodule $path to $commit_rev
 
-Origin: $src
+Upstream: $src
 Branch: $real_branch
 
-Commit in origin:
+Full commit in the upstream:
 
+---
 $commit_message
+---
+
+Learn more about unrealmodules at https://github.com/epeli/git-unrealmodule
+
 "
 }
 
