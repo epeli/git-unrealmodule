@@ -5,7 +5,8 @@ Manage git repositories inside git repositories with Unreal Modules.
 
 Simple alternative to the `git-submodule` and `git-subtree`.
 This is closer to `git-subtree` but does not try to merge anything.
-It just commits the changes from the subrepository into a single commit
+It just clones the subrepository to a directory inside the parent repository
+and commits the changes from the subrepository into a single commit
 to the parent repository.
 
 ## Background
