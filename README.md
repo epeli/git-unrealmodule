@@ -55,18 +55,18 @@ or you can install it with npm
 From `--help`
 ```
 
-Manage sub git repositories from an .unrealmodules file
+Manage git subrepositories from an .unrealmodules file
 
     usage: git-unrealmodule [SUBCOMMAND] <PATH>
 
 Available subcommands
 
     clone   - clone new git repositories from .unrealmodules
-    commit  - commit changes from sub repositories to the parent repository
-    restore - restore .git directories for the sub repositories defined in .unrealmodules
+    commit  - commit changes from the subrepositories to the parent repository
+    restore - restore .git directories for the subrepositories defined in .unrealmodules
     help    - show this help
 
-Add PATH to execute command to a single sub repository
+Add PATH to execute command to a single subrepository
 
 Format of the .unrealmodules
 
