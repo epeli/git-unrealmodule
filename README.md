@@ -27,13 +27,8 @@ When a new developer comes to the project he/she does not have to care at all ab
 the Unrealmodules but if they want to commit code back to the sub repository upstreams
 they can restore the `.git` directories for the Unrealmodules with `git unrealmodule restore`.
 
-The restore command is pretty low level at the moment.
-It only restores the `.git` directory to the branch defined in `.unrealmodules`.
-So it's very likely to see changes in the sub repository if the upstream has new commits
-since the last `git unrealmodule commit` call.
-
-It's up to the developer to handle this situation. They can neither reset the sub repository
-or commit changes from the parent repository to the sub repository.
+If there has been changes to the sub repository from the parent repository the changes
+will appear as untracked changes in the sub repository.
 
 ## Install
 

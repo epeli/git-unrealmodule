@@ -106,6 +106,13 @@ clone_module() {
     fi
 }
 
+last_upstream_commit() {
+    path="$1"
+    # Use parent repository history to find out the last used sub repository commit
+    last_commit="$(git log --pretty=format:"%s" "$path" | grep "Commit unrealmodule" | head -n 1 | cut -d " " -f 5)"
+    echo "$last_commit"
+}
+
 restore_module() {
     path="$1"
     src="$2"
@@ -121,13 +128,22 @@ restore_module() {
         return
     fi
 
+    last_commit="$(last_upstream_commit "$path")"
+
     tmp="$(mktemp -d --suffix -unrealmodule)"
     git clone "$src" "$tmp"
+
+    cd "$tmp"
+
     if [ "$branch" != "" ]; then
-        cd "$tmp"
         git checkout -t "origin/$branch"
-        cd -
     fi
+
+    if [ "$last_commit" != "" ]; then
+        git reset --hard "$last_commit"
+    fi
+
+    cd -
 
     mv "$tmp/.git" "$path"
     rm -rf "$tmp"
@@ -162,7 +178,7 @@ commit_module() {
     fi
 
     commit_message="$(git log -1)"
-    commit_rev="$(git rev-parse HEAD | head -c 7)"
+    commit_rev="$(git rev-parse HEAD)"
     real_branch="$(git rev-parse --abbrev-ref HEAD)"
 
     cd "$root"
@@ -186,6 +202,8 @@ dispatch_command() {
         commit_module $@
     elif [ "$command" = "restore" ]; then
         restore_module $@
+    elif [ "$command" = "last-upstream-commit" ]; then
+        last_upstream_commit $@
     else
         err "Unknown unrealmodule command: $command"
         exit 1
