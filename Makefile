@@ -14,3 +14,11 @@ install-symlink:
 
 uninstall:
 	rm -f $(script_target)
+
+update-readme:
+	sed -i  -n '/## Command documentation/q;p' README.md
+	echo "## Command documentation\n" >> README.md
+	echo '```' >> README.md
+	./git-unrealmodule help >> README.md
+	echo '```' >> README.md
+	git commit README.md -m "Update readme from --help"
