@@ -13,14 +13,15 @@ Unrealmodules can help you in this situation.
 
 ## Usage
 
-Start with
+Define a list of sub repositories and paths in a `.unrealmodules` file
 
-1. Define a list of sub repositories and paths in a `.unrealmodules` file
-2. Commit `.unrealmodules` in to the parent repository
-    - The format is documented below
-3. Clone the sub repositories using `git unrealmodule clone`
-4. Work on the parent and/or cloned sub repositories
-5. Commit the sub repositories to the parent repository with `git unrealmodule commit`
+    path/in/the/repo|https://github.com/epeli/git-unrealmodule|master
+    something/else|https://github.com/epeli/redux-render-prop
+
+- Commit `.unrealmodules` in to the parent repository.
+- Clone the sub repositories using `git unrealmodule clone`
+- Work on the parent and/or cloned sub repositories
+- Commit the sub repositories to the parent repository with `git unrealmodule commit`
 
 When a new developer comes to the project he/she does not have to care at all about
 the Unrealmodules but if they want to commit code back to the sub repository upstreams
