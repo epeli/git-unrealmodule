@@ -43,7 +43,11 @@ will appear as untracked changes in the subrepository.
 
 The `git-unrealmodule` is just a single POSIX shell script.
 
-Simplest way to install it is just to copy it to `/usr/local/bin` directory.
+Simplest way to install it is to put in somewhere in your PATH
+
+    cd /usr/local/bin
+    wget https://raw.githubusercontent.com/epeli/git-unrealmodule/master/git-unrealmodule
+    chmod +x git-unrealmodule
 
 or you can use the provided installer
 
@@ -54,7 +58,6 @@ or you can use the provided installer
 or you can install it with npm
 
     npm install -g git-unrealmodule
-
 
 ## Command documentation
 
