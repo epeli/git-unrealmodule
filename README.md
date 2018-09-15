@@ -1,6 +1,8 @@
 
 # git-unrealmodule
 
+Manage git repositories inside git repositories
+
 ## Background
 
 - You deploy code using git to a system where all the code must be committed inside the repository
