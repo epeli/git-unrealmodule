@@ -47,3 +47,39 @@ or you can install it with npm
 
     npm install -g git-unrealmodule
 
+
+## Command documentation
+
+```
+
+Manage sub git repositories from an .unrealmodules file
+
+    usage: git-unrealmodule [SUBCOMMAND] <PATH>
+
+Available subcommands
+
+    clone   - clone new git repositories from .unrealmodules
+    commit  - commit changes from sub repositories
+    restore - restore .git files for the .unrealmodules
+    help    - show this help
+
+Add PATH to execute command to a single sub repository
+
+Format of the .unrealmodules
+
+    Each line has following format
+
+        [PATH]|[GIT_SOURCE]|<BRANCH>
+
+    Example
+
+        path/in/the/repo|https://github.com/epeli/git-unrealmodule|master
+        # This line is a comment
+        something/else|https://github.com/epeli/redux-render-prop
+
+    The branch is optional
+
+For more information see https://github.com/epeli/git-unrealmodule
+
+    
+```
