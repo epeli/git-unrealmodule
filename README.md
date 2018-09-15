@@ -1,34 +1,37 @@
 
 # git-unrealmodule
 
-Manage git repositories inside git repositories
+Manage git repositories inside git repositories with Unreal Modules.
 
 ## Background
 
 - You deploy code using git to a system where all the code must be committed inside the repository
 - You want to share code between your projects
-- You cannot or do not want to use git submodule
+- You cannot or do not want to use git submodules
 
-Unrealmodules can help you in this situation.
+Unreal Modules can help you in this situation.
 
 ## Usage
 
-Define a list of sub repositories and paths in a `.unrealmodules` file
+Define a list of subrepositories and paths in a `.unrealmodules` file
 
     path/in/the/repo|https://github.com/epeli/git-unrealmodule|master
     something/else|https://github.com/epeli/redux-render-prop
 
 - Commit `.unrealmodules` in to the parent repository.
-- Clone the sub repositories using `git unrealmodule clone`
-- Work on the parent and/or cloned sub repositories
-- Commit the sub repositories to the parent repository with `git unrealmodule commit`
+- Clone the subrepositories using `git unrealmodule clone`
+- Work on the parent and/or cloned subrepositories
+- Commit the subrepositories to the parent repository with `git unrealmodule commit`
 
-When a new developer comes to the project he/she does not have to care at all about
-the Unrealmodules but if they want to commit code back to the sub repository upstreams
-they can restore the `.git` directories for the Unrealmodules with `git unrealmodule restore`.
+Now when new developers come to the project ***they do not have to know anything at all about the Unreal Modules***.
+They can just clone the repository and continue as if Unreal Modules were never used.
+That's why they are called "Unreal".
 
-If there has been changes to the sub repository from the parent repository the changes
-will appear as untracked changes in the sub repository.
+But if they (or you with a fresh clone) want to commit code back to the subrepository upstreams
+they can restore the `.git` directories for the Unreal Modules with `git unrealmodule restore`.
+
+If there has been changes to the subrepository from the parent repository the changes
+will appear as untracked changes in the subrepository.
 
 ## Install
 
