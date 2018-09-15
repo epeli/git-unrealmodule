@@ -29,9 +29,15 @@ add_error() {
 init_module() {
     path="$1"
     src="$2"
+    branch="${3:-}"
 
     if [ ! -e "$path" ]; then
         git clone "$src" "$path"
+        if [ "$branch" != "" ]; then
+            cd "$path"
+            git checkout -t "origin/$branch"
+            cd -
+        fi
     else
         add_error "Cannot init path $path: already exits"
     fi
@@ -66,6 +72,7 @@ commit_module() {
 
     commit_message="$(git log -1)"
     commit_rev="$(git rev-parse HEAD | head -c 7)"
+    real_branch="$(git rev-parse --abbrev-ref HEAD)"
 
     cd "$root"
 
@@ -73,6 +80,7 @@ commit_module() {
     git commit -m "Commit unrealmodule $path to $commit_rev
 
 Origin: $src
+Branch: $real_branch
 
 Commit in origin:
 
@@ -81,16 +89,18 @@ $commit_message
 }
 
 
-while read module; do
+while read module_line; do
     cd "$root"
-    path="$(echo "$module" | cut -d "|" -f 1)"
-    src="$(echo "$module" | cut -d "|" -f 2)"
+    path="$(echo "$module_line" | cut -d "|" -f 1)"
+    src="$(echo "$module_line" | cut -d "|" -f 2)"
+    branch="$(echo "$module_line" | cut -d "|" -f 3)"
+
     path="${path%/}" # remove trailing slash
 
     if [ "$command" = "init" ]; then
-        init_module "$path" "$src"
+        init_module "$path" "$src" "$branch"
     elif [ "$command" = "commit" ]; then
-        commit_module "$path" "$src"
+        commit_module "$path" "$src" "$branch"
     fi
 
 
