@@ -82,5 +82,5 @@ Format of the .unrealmodules
 
 For more information see https://github.com/epeli/git-unrealmodule
 
-    
+
 ```
