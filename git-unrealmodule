@@ -20,6 +20,8 @@ Available subcommands
     restore - restore .git files for the .unrealmodules
     help    - show this help
 
+For more information see https://github.com/epeli/git-unrealmodule
+
 Format of the .unrealmodules
 
     Each line has following format
