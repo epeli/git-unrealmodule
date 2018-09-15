@@ -8,7 +8,7 @@ err() {
 }
 
 help() {
-    >&2 echo "
+    echo "
 Manage sub git repositories from an .unrealmodules file
 
     usage: $(basename $0) [SUBCOMMAND] <PATH>
@@ -42,8 +42,13 @@ For more information see https://github.com/epeli/git-unrealmodule
 }
 
 if [ "${1:-}" = "" ]; then
-    help
+    >&2 help
     exit 1
+fi
+
+if [ "${1:-}" = "help" -o  "${1:-}" = "-h" -o  "${1:-}" = "--help" ]; then
+    help
+    exit
 fi
 
 command="$1"
@@ -182,9 +187,6 @@ dispatch_command() {
         commit_module $@
     elif [ "$command" = "restore" ]; then
         restore_module $@
-    elif [ "$command" = "help" -o  "$command" = "-h" -o  "$command" = "--help" ]; then
-        help
-        exit 1
     else
         err "Unknown unrealmodule command: $command"
         exit 1
