@@ -20,6 +20,9 @@ if [ ! -f .unrealmodules ]; then
     exit 1
 fi
 
+# Allow comment lines starting with hash
+module_config="$(cat .unrealmodules | sed '/^ *#/ d')"
+
 error_messages=""
 
 add_error() {
@@ -117,6 +120,7 @@ $commit_message
 }
 
 
+echo "$module_config" |
 while read module_line; do
     cd "$root"
     path="$(echo "$module_line" | cut -d "|" -f 1)"
@@ -134,7 +138,7 @@ while read module_line; do
     fi
 
 
-done < .unrealmodules
+done
 
 
 
