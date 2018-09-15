@@ -9,18 +9,18 @@ err() {
 
 help() {
     echo "
-Manage sub git repositories from an .unrealmodules file
+Manage git subrepositories from an .unrealmodules file
 
     usage: $(basename $0) [SUBCOMMAND] <PATH>
 
 Available subcommands
 
     clone   - clone new git repositories from .unrealmodules
-    commit  - commit changes from sub repositories to the parent repository
-    restore - restore .git directories for the sub repositories defined in .unrealmodules
+    commit  - commit changes from the subrepositories to the parent repository
+    restore - restore .git directories for the subrepositories defined in .unrealmodules
     help    - show this help
 
-Add PATH to execute command to a single sub repository
+Add PATH to execute command to a single subrepository
 
 Format of the .unrealmodules
 
@@ -168,7 +168,7 @@ commit_module() {
     cd "$path"
 
     if [ ! -d .git ]; then
-        add_error "Cannot commit: $path: Not a sub git repository"
+        add_error "Cannot commit: $path: Not a git repository"
         return
     fi
 
