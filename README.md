@@ -53,6 +53,7 @@ or you can install it with npm
 
 ## Command documentation
 
+From `--help`
 ```
 
 Manage sub git repositories from an .unrealmodules file
@@ -72,7 +73,7 @@ Format of the .unrealmodules
 
     Each line has following format
 
-        [PATH]|[GIT_SOURCE]|<BRANCH>
+        [PATH]|[GIT_SOURCE]<|BRANCH>
 
     Example
 
@@ -83,6 +84,5 @@ Format of the .unrealmodules
     The branch is optional
 
 For more information see https://github.com/epeli/git-unrealmodule
-
 
 ```
