@@ -18,6 +18,7 @@ uninstall:
 update-readme:
 	sed -i  -n '/## Command documentation/q;p' README.md
 	echo "## Command documentation\n" >> README.md
+	echo 'From `--help`' >> README.md
 	echo '```' >> README.md
 	./git-unrealmodule help >> README.md
 	echo '```' >> README.md

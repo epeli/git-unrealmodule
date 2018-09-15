@@ -9,7 +9,7 @@ Manage git repositories inside git repositories
 - You want to share code between your projects
 - You cannot or do not want to use git submodule
 
-Unrealmodules can help you in this situation. `
+Unrealmodules can help you in this situation.
 
 ## Usage
 
