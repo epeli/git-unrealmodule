@@ -103,7 +103,7 @@ commit_module() {
     fi
 
     if [ "$(git status --porcelain)" != "" ]; then
-        add_error "Cannot commit: $path: Is dirty. Commit changes in it first"
+        add_error "Cannot commit: $path: Is dirty. Commit or reset the changes in it first"
         return
     fi
 
