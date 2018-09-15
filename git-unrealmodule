@@ -11,7 +11,7 @@ help() {
     >&2 echo "
 Manage sub git repositories from an .unrealmodules file
 
-    usage: $(basename $0) [SUBCOMMAND]
+    usage: $(basename $0) [SUBCOMMAND] <PATH>
 
 Available subcommands
 
@@ -20,7 +20,7 @@ Available subcommands
     restore - restore .git files for the .unrealmodules
     help    - show this help
 
-For more information see https://github.com/epeli/git-unrealmodule
+Add PATH to execute command to a single sub repository
 
 Format of the .unrealmodules
 
@@ -36,6 +36,8 @@ Format of the .unrealmodules
 
     The branch is optional
 
+For more information see https://github.com/epeli/git-unrealmodule
+
     "
 }
 
@@ -45,6 +47,8 @@ if [ "${1:-}" = "" ]; then
 fi
 
 command="$1"
+explicit_path="${2:-}"
+explicit_path="${explicit_path%/}" # remove trailing slash
 root="$(pwd)"
 
 
@@ -58,8 +62,16 @@ if [ ! -f .unrealmodules ]; then
     exit 1
 fi
 
+# https://www.shellscript.sh/trap.html
+trap cleanup 0 1 2 3 6
+
+cleanup() {
+    rm -fr /tmp/*-unrealmodule
+}
+
 # Allow comment lines starting with hash
-module_config="$(cat .unrealmodules | sed '/^ *#/ d')"
+module_config_file=$(mktemp --suffix -unrealmodule)
+cat .unrealmodules | sed '/^ *#/ d' > "$module_config_file"
 
 error_messages=""
 
@@ -179,8 +191,8 @@ dispatch_command() {
     fi
 }
 
+explicit_path_matched=
 
-echo "$module_config" |
 while read module_line; do
     cd "$root"
     path="$(echo "$module_line" | cut -d "|" -f 1)"
@@ -188,10 +200,22 @@ while read module_line; do
     branch="$(echo "$module_line" | cut -d "|" -f 3)"
     path="${path%/}" # remove trailing slash
 
-    dispatch_command "$path" "$src" "$branch"
-done
+    # err "path:$path src:$src branch:$branch"
 
+    if [ "$explicit_path" != "" ]; then
+        if [ "$(realpath "$explicit_path")" =  "$(realpath "$path")" ]; then
+            explicit_path_matched="1"
+            dispatch_command "$path" "$src" "$branch"
+        fi
+    else
+        dispatch_command "$path" "$src" "$branch"
+    fi
+done < "$module_config_file"
 
+if [ "$explicit_path" != "" -a "$explicit_path_matched" != "1" ]; then
+    err "$explicit_path does match with any repositories in .unrealmodules"
+    exit 1
+fi
 
 if [ "$error_messages" != "" ]; then
     err
