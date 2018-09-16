@@ -19,7 +19,7 @@ Unreal Modules can help you in this situation.
 
 ## Usage
 
-Define a list of subrepositories and paths in a `.unrealmodules` file to root of the parent repository.
+Define a list of subrepositories and paths in a `.unrealmodules` file in the root of the parent repository.
 
 Example
 
