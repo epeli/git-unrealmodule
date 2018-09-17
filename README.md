@@ -3,22 +3,30 @@
 
 Manage git repositories inside git repositories with Unreal Modules.
 
+Simple alternative to the `git-submodule` and `git-subtree`.
+This is closer to `git-subtree` but does not try to merge anything.
+It just clones the subrepository to a directory inside the parent repository
+and commits the changes from the subrepository into a single commit
+to the parent repository.
+
 ## Background
 
 - You deploy code using git to a system where all the code must be committed inside the repository
 - You want to share code between your projects
-- You cannot or do not want to use git submodules
+- You cannot or do not want to use  `git-submodule` or `git-subtree`
 
 Unreal Modules can help you in this situation.
 
 ## Usage
 
-Define a list of subrepositories and paths in a `.unrealmodules` file
+Define a list of subrepositories and paths in a `.unrealmodules` file in the root of the parent repository.
+
+Example
 
     path/in/the/repo|https://github.com/epeli/git-unrealmodule|master
     something/else|https://github.com/epeli/redux-render-prop
 
-- Commit `.unrealmodules` in to the parent repository.
+- Commit `.unrealmodules` into the parent repository.
 - Clone the subrepositories using `git unrealmodule clone`
 - Work on the parent and/or cloned subrepositories
 - Commit the subrepositories to the parent repository with `git unrealmodule commit`
@@ -37,7 +45,11 @@ will appear as untracked changes in the subrepository.
 
 The `git-unrealmodule` is just a single POSIX shell script.
 
-Simplest way to install it is just to copy it to `/usr/local/bin` directory.
+Simplest way to install it is to put in somewhere in your PATH
+
+    cd /usr/local/bin
+    wget https://raw.githubusercontent.com/epeli/git-unrealmodule/master/git-unrealmodule
+    chmod +x git-unrealmodule
 
 or you can use the provided installer
 
@@ -48,7 +60,6 @@ or you can use the provided installer
 or you can install it with npm
 
     npm install -g git-unrealmodule
-
 
 ## Command documentation
 
