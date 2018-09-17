@@ -259,9 +259,10 @@ while read module_line; do
     # err "path:$path src:$src branch:$branch"
 
     if [ "$explicit_path" != "" ]; then
-        if [ "$(realpath "$explicit_path")" =  "$(realpath "$path")" ]; then
+        if [ "$(realpath "$explicit_path")" = "$(realpath "$path")" ]; then
             explicit_path_matched="1"
             dispatch_command "$path" "$src" "$branch"
+            continue
         fi
     else
         dispatch_command "$path" "$src" "$branch"
