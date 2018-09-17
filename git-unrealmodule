@@ -251,6 +251,11 @@ explicit_path_matched=
 
 while read module_line; do
     cd "$root"
+
+    if [ "$module_line" = "" ]; then
+        continue
+    fi
+
     path="$(echo "$module_line" | cut -d "|" -f 1)"
     src="$(echo "$module_line" | cut -d "|" -f 2)"
     branch="$(echo "$module_line" | cut -d "|" -f 3)"
