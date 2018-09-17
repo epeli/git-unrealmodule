@@ -11,14 +11,15 @@ help() {
     echo "
 Manage git subrepositories from an .unrealmodules file
 
-    usage: $(basename $0) [SUBCOMMAND] <PATH>
+    usage: $(basename $0) [SUBCOMMAND]
 
 Available subcommands
 
-    clone   - clone new git repositories from .unrealmodules
-    commit  - commit changes from the subrepositories to the parent repository
-    restore - restore .git directories for the subrepositories defined in .unrealmodules
-    help    - show this help
+    clone   <PATH> - clone new git repositories from .unrealmodules
+    commit  <PATH> - commit changes from the subrepositories to the parent repository
+    restore <PATH> - restore .git directories for the subrepositories defined in .unrealmodules
+    add     [PATH] [SRC] - Add subrepository
+    help    <PATH> - show this help
 
 Add PATH to execute command to a single subrepository
 
@@ -104,6 +105,29 @@ clone_module() {
         git checkout -t "origin/$branch"
         cd -
     fi
+}
+
+add_module() {
+    path="$1"
+    path="${path%/}" # remove trailing slash
+    src="${2:-}"
+
+    real_src=""
+
+    if [ -d "$path/.git" ]; then
+        cd "$path"
+        real_src="$(git config --get remote.origin.url)"
+        if [ "$src" != "" -a "$real_src" != "$src" ]; then
+            err "$src does not match with $real_src"
+            exit 1
+        else
+            src="$real_src"
+        fi
+        cd - >/dev/null
+    fi
+
+
+    echo "${path}|${src}" >> .unrealmodules
 }
 
 last_upstream_commit() {
@@ -214,6 +238,14 @@ dispatch_command() {
         exit 1
     fi
 }
+
+
+
+if [ "$command" = "add" ]; then
+    add_module $2 ${3:-}
+    exit 0
+fi
+
 
 explicit_path_matched=
 
