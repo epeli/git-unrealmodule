@@ -208,6 +208,12 @@ commit_module() {
     cd "$root"
 
     git add "$path/"
+
+    if [ "$(git diff --cached)" = "" ]; then
+        return
+    fi
+
+
     git commit -m "Commit unrealmodule $path to $commit_rev
 
 Upstream: $src
