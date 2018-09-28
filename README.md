@@ -1,6 +1,8 @@
 
 # git-unrealmodule
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/epeli/git-unrealmodule.svg)](https://greenkeeper.io/)
+
 Manage git repositories inside git repositories with Unreal Modules.
 
 Simple alternative to the `git-submodule` and `git-subtree`.
