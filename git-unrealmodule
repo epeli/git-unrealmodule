@@ -85,9 +85,9 @@ add_error() {
 }
 
 clone_module() {
-    path="$1"
-    src="$2"
-    branch="${3:-}"
+    local path="$1"
+    local src="$2"
+    local branch="${3:-}"
 
     if [ -d "$path" -a -d "$path/.git" ]; then
         err "Clone already OK: $path"
@@ -108,11 +108,11 @@ clone_module() {
 }
 
 add_module() {
-    path="$1"
-    path="${path%/}" # remove trailing slash
-    src="${2:-}"
+    local path="$1"
+    local path="${path%/}" # remove trailing slash
+    local src="${2:-}"
 
-    real_src=""
+    local real_src=""
 
     if [ -d "$path/.git" ]; then
         cd "$path"
@@ -131,16 +131,16 @@ add_module() {
 }
 
 last_upstream_commit() {
-    path="$1"
+    local path="$1"
     # Use parent repository history to find out the last used sub repository commit
-    last_commit="$(git log --pretty=format:"%s" "$path" | grep "Commit unrealmodule" | head -n 1 | cut -d " " -f 5)"
+    local last_commit="$(git log --pretty=format:"%s" "$path" | grep "Commit unrealmodule" | head -n 1 | cut -d " " -f 5)"
     echo "$last_commit"
 }
 
 restore_module() {
-    path="$1"
-    src="$2"
-    branch="${3:-}"
+    local path="$1"
+    local src="$2"
+    local branch="${3:-}"
 
     if [ ! -d "$path" ]; then
         add_error "Cannot restore: $path is not a directory"
@@ -152,9 +152,9 @@ restore_module() {
         return
     fi
 
-    last_commit="$(last_upstream_commit "$path")"
+    local last_commit="$(last_upstream_commit "$path")"
 
-    tmp="$(mktemp -d --suffix -unrealmodule)"
+    local tmp="$(mktemp -d --suffix -unrealmodule)"
     git clone "$src" "$tmp"
 
     cd "$tmp"
@@ -175,8 +175,8 @@ restore_module() {
 }
 
 commit_module() {
-    path="$1"
-    src="$2"
+    local path="$1"
+    local src="$2"
 
     if [ "$(git diff --cached)" != "" ]; then
         err "You have files in staging area. Cannot continue."
@@ -201,9 +201,9 @@ commit_module() {
         return
     fi
 
-    commit_message="$(git log -1)"
-    commit_rev="$(git rev-parse HEAD)"
-    real_branch="$(git rev-parse --abbrev-ref HEAD)"
+    local commit_message="$(git log -1)"
+    local commit_rev="$(git rev-parse HEAD)"
+    local real_branch="$(git rev-parse --abbrev-ref HEAD)"
 
     cd "$root"
 
