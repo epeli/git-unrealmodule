@@ -18,6 +18,7 @@ Available subcommands
     clone   <PATH> - clone new git repositories from .unrealmodules
     commit  <PATH> - commit changes from the subrepositories to the parent repository
     restore <PATH> - restore .git directories for the subrepositories defined in .unrealmodules
+    status  <PATH> - display status for unreal module in a path
     add     <PATH> [SRC] [BRANCH] - Add subrepository
     help    - show this help
 
@@ -74,6 +75,13 @@ cleanup() {
     rm -fr /tmp/*-unrealmodule
 }
 
+
+goback() {
+    # Go to previous directory without echoing it to stdout
+    cd - >/dev/null
+}
+
+
 # Allow comment lines starting with hash
 module_config_file=$(mktemp --suffix -unrealmodule)
 cat .unrealmodules | sed '/^ *#/ d' > "$module_config_file"
@@ -103,7 +111,7 @@ clone_module() {
     if [ "$branch" != "" ]; then
         cd "$path"
         git checkout -t "origin/$branch"
-        cd -
+        goback
     fi
 }
 
@@ -124,7 +132,7 @@ add_module() {
         else
             src="$real_src"
         fi
-        cd - >/dev/null
+        goback
     else
         mkdir -p "$path"
         clone_module "$path" "$src" "$branch"
@@ -145,6 +153,7 @@ restore_module() {
     local path="$1"
     local src="$2"
     local branch="${3:-}"
+
 
     if [ ! -d "$path" ]; then
         add_error "Cannot restore: $path is not a directory"
@@ -171,11 +180,42 @@ restore_module() {
         git reset --hard "$last_commit"
     fi
 
-    cd -
+    goback
 
     mv "$tmp/.git" "$path"
     rm -rf "$tmp"
 
+}
+
+
+module_status() {
+    local path="$1"
+
+    if [ ! -d "$path" ]; then
+        echo "$path: missing completely"
+        return
+    fi
+
+    if [ ! -d "$path/.git" ]; then
+        echo "$path: .git missing. Requires unrealmodule restore"
+        return
+    fi
+
+
+    local parent_changes="$(git status --porcelain "$path")"
+
+    if [ "$parent_changes" != "" ]; then
+        echo "$path: Dirty from parent"
+    fi
+
+    cd "$path"
+
+    local changes="$(git status --porcelain .)"
+    if [ "$changes" != "" ]; then
+        echo "$path: Internally dirty"
+    fi
+
+    goback
 }
 
 commit_module() {
@@ -241,6 +281,8 @@ dispatch_command() {
         commit_module $@
     elif [ "$command" = "restore" ]; then
         restore_module $@
+    elif [ "$command" = "status" ]; then
+        module_status $@
     elif [ "$command" = "last-upstream-commit" ]; then
         last_upstream_commit $@
     else
