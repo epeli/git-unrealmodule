@@ -18,8 +18,8 @@ Available subcommands
     clone   <PATH> - clone new git repositories from .unrealmodules
     commit  <PATH> - commit changes from the subrepositories to the parent repository
     restore <PATH> - restore .git directories for the subrepositories defined in .unrealmodules
-    add     [PATH] [SRC] - Add subrepository
-    help    <PATH> - show this help
+    add     <PATH> [SRC] [BRANCH] - Add subrepository
+    help    - show this help
 
 Add PATH to execute command to a single subrepository
 
@@ -110,7 +110,8 @@ clone_module() {
 add_module() {
     local path="$1"
     local path="${path%/}" # remove trailing slash
-    local src="${2:-}"
+    local src="${2}"
+    local branch="${3:-}"
 
     local real_src=""
 
@@ -124,6 +125,9 @@ add_module() {
             src="$real_src"
         fi
         cd - >/dev/null
+    else
+        mkdir -p "$path"
+        clone_module "$path" "$src" "$branch"
     fi
 
 
@@ -248,7 +252,7 @@ dispatch_command() {
 
 
 if [ "$command" = "add" ]; then
-    add_module $2 ${3:-}
+    add_module $2 ${3} ${4:-}
     exit 0
 fi
 
